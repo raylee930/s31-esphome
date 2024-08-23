@@ -1,0 +1,84 @@
+esphome:
+  name: sonoff-s31
+  platform: ESP8266
+  board: esp01_1m
+
+api:
+  reboot_timeout: 0s
+    
+ota:
+  platform: esphome
+
+wifi:
+  ssid: "sonoff-s31"
+  password: "12345678"
+  ap:
+    ssid: "sonoff-s31-setup"
+    password: "12345678"
+
+captive_portal:
+
+web_server:
+  port: 80
+  version: 3
+  ota: false
+  js_include: "./v3/www.js"
+  js_url: ""
+  auth:
+    username: "admin"
+    password: "12345678"
+
+logger:
+  logs:
+    sensor: DEBUG
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+    name: "Button"
+    internal: true
+    on_press:
+      - switch.toggle: relay
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address"
+      icon: "mdi:ip-network"
+      update_interval: 60s
+    mac_address:
+      name: "MAC Address"
+      icon: "mdi:network"
+    ssid:
+      name: "Connected SSID"
+      icon: "mdi:wifi"
+      update_interval: 60s
+      
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    icon: "mdi:signal"
+    update_interval: 60s
+
+switch:
+  - platform: gpio
+    name: "S31 Switch"
+    icon: "mdi:toggle-switch-variant"
+    pin: GPIO12
+    id: relay
+    restore_mode: RESTORE_DEFAULT_ON
+
+button:
+  - platform: restart
+    name: "Reboot"
+    icon: "mdi:restart"
+
+time:
+  - platform: sntp
+    id: my_time
+
+status_led:
+  pin:
+    number: GPIO13

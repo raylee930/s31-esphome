@@ -1,5 +1,5 @@
 esphome:
-  name: sonoff-s31
+  name: sonoff-s31-lite
   platform: ESP8266
   board: esp01_1m
 

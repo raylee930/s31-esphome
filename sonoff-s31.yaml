@@ -1,0 +1,132 @@
+esphome:
+  name: sonoff-s31
+  platform: ESP8266
+  board: esp01_1m
+
+api:
+  reboot_timeout: 0s
+    
+ota:
+  platform: esphome
+
+wifi:
+  ssid: "sonoff-s31"
+  password: "12345678"
+  ap:
+    ssid: "sonoff-s31-setup"
+    password: "12345678"
+
+captive_portal:
+
+web_server:
+  port: 80
+  version: 3
+  ota: false
+  js_include: "./v3/www.js"
+  js_url: ""
+  auth:
+    username: "admin"
+    password: "12345678"
+
+logger:
+  baud_rate: 0
+  logs:
+    sensor: DEBUG
+
+uart:
+  rx_pin: RX
+  baud_rate: 4800
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+    name: "Button"
+    internal: true
+    on_press:
+      - switch.toggle: relay
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address"
+      icon: "mdi:ip-network"
+      update_interval: 60s
+    mac_address:
+      name: "MAC Address"
+      icon: "mdi:network"
+    ssid:
+      name: "Connected SSID"
+      icon: "mdi:wifi"
+      update_interval: 60s
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    icon: "mdi:signal"
+    update_interval: 60s
+  - platform: cse7766
+    current:
+      name: "Current"
+      icon: "mdi:current-ac"
+      accuracy_decimals: 2
+      filters:
+        - throttle_average: 60s
+    voltage:
+      name: "Voltage"
+      icon: "mdi:flash-triangle"
+      accuracy_decimals: 2
+      filters:
+        - throttle_average: 60s
+    power:
+      name: "Power"
+      icon: "mdi:power"
+      accuracy_decimals: 2
+      id: my_power
+      filters:
+        - throttle_average: 60s
+    energy:
+      name: "Energy"
+      icon: "mdi:flash"
+      accuracy_decimals: 2
+      filters:
+        - throttle: 60s
+    apparent_power:
+      name: "Apparent Power"
+      icon: "mdi:power-plug"
+      filters:
+        - throttle_average: 60s
+    power_factor:
+      name: "Power Factor"
+      icon: "mdi:factory"
+      accuracy_decimals: 2
+      filters:
+        - throttle_average: 60s
+
+  - platform: total_daily_energy
+    name: "Daily Energy"
+    icon: "mdi:calendar-today"
+    power_id: my_power
+    accuracy_decimals: 2
+
+switch:
+  - platform: gpio
+    name: "S31 Switch"
+    icon: "mdi:toggle-switch-variant"
+    pin: GPIO12
+    id: relay
+    restore_mode: RESTORE_DEFAULT_OFF
+
+button:
+  - platform: restart
+    name: "Reboot"
+    icon: "mdi:restart"
+
+time:
+  - platform: sntp
+    id: my_time
+
+status_led:
+  pin:
+    number: GPIO13

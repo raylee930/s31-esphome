@@ -73,7 +73,7 @@ switch:
     icon: "mdi:toggle-switch-variant"
     pin: GPIO12
     id: relay
-    restore_mode: RESTORE_DEFAULT_ON
+    restore_mode: RESTORE_DEFAULT_OFF
 
 button:
   - platform: restart

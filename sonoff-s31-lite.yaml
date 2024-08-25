@@ -29,6 +29,7 @@ web_server:
     password: "12345678"
 
 logger:
+  baud_rate: 0
   logs:
     sensor: DEBUG
 

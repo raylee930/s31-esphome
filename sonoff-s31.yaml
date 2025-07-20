@@ -3,12 +3,13 @@ esphome:
   friendly_name: Sonoff S31
   project:
     name: "Sonoff.S31"
-    version: "2025.4.1"
+    version: "2025.7.2"
 
 esp8266:
   board: esp01_1m
   framework:
     version: recommended
+  restore_from_flash: true
 
 api:
   reboot_timeout: 0s

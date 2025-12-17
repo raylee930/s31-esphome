@@ -3,7 +3,7 @@ esphome:
   friendly_name: Sonoff S31 Lite
   project:
     name: "Sonoff.S31-Lite"
-    version: "2025.7.2"
+    version: "2025.12.0"
 
 esp8266:
   board: esp01_1m
@@ -20,6 +20,7 @@ ota:
 wifi:
   ssid: "sonoff-s31"
   password: "12345678"
+  min_auth_mode: WPA2
   ap:
     ssid: "sonoff-s31-setup"
     password: "12345678"
@@ -59,14 +60,12 @@ text_sensor:
     ip_address:
       name: "IP Address"
       icon: "mdi:ip-network"
-      update_interval: 60s
     mac_address:
       name: "MAC Address"
       icon: "mdi:network"
     ssid:
       name: "Connected SSID"
       icon: "mdi:wifi"
-      update_interval: 60s
       
 sensor:
   - platform: wifi_signal
@@ -77,7 +76,7 @@ sensor:
 switch:
   - platform: gpio
     name: "S31 Switch"
-    icon: "mdi:toggle-switch-variant"
+    icon: "mdi:power-plug"
     pin: GPIO12
     id: relay
     restore_mode: RESTORE_DEFAULT_OFF
@@ -89,7 +88,12 @@ button:
 
 time:
   - platform: sntp
-    id: my_time
+    id: sntp_time
+    timezone: Europe/Sofia
+    servers:
+     - pool.ntp.org
+     - time.google.com
+     - time.windows.com
 
 status_led:
   pin:
